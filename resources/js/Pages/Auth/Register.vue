@@ -1,115 +1,70 @@
 <script setup lang="ts">
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+    import { useForm } from '@inertiajs/vue3';
+    import BaseLayout from '@/Layouts/BaseLayout.vue';
+    import InputLabel from '@/Components/InputLabel.vue';
+    import Button from '@/Components/Button.vue';
+    import rectImgUrl from '../../../assets/svg/rect.svg';
 
-const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-});
+    const form = useForm({
+        name: null,
+        email: null,
+        password: null,
+        password_confirmation: null,
+        remember: false,
+    })
 
-const submit = () => {
-    form.post(route('register'), {
+    const onSubmit = () => {
+        form.post('/register', {
         onFinish: () => {
             form.reset('password', 'password_confirmation');
         },
+        onError: errors => {
+            console.log(errors);
+        }, 
     });
-};
+    } 
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Register" />
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+    <BaseLayout not-width-limit>
+        <div class="relative h-full flex items-center justify-center">
+            <img class="size-96 absolute top-0 left-0 firstBackImg" :src="rectImgUrl"/>
+            <img class="size-96 absolute bottom-0 right-0 secondBackImg" :src="rectImgUrl"/>
+            <form @submit.prevent="onSubmit" class="p-10 registerForm bg-white shadow-md rounded-xl flex flex-col">
+                <h2 class="self-center text-orange-400 text-3xl font-medium">Регистрация</h2>
+                <div class="flex flex-col">
+                    <InputLabel :error="form.errors.name" title="Логин">
+                        <input type="text" name="login" v-model="form.name" required/>
+                    </InputLabel>
+                    <InputLabel :error="form.errors.email" title="Email">
+                        <input type="email" name="email" v-model="form.email" required/>
+                    </InputLabel>
+                    <InputLabel :error="form.errors.password" title="Пароль">
+                        <input type="password" name="password" v-model="form.password" required/>
+                    </InputLabel>
+                    <InputLabel :error="form.errors.password_confirmation" title="Повторите пароль">
+                        <input type="password" name="password_confirmation" v-model="form.password_confirmation" required/>
+                    </InputLabel>
+                </div>
+                <div class="mt-10">
+                    <Button>Зарегестрироваться</Button>
+                </div>
+            </form>
+        </div>
+    </BaseLayout>
 </template>
+
+<style lang="css">
+    .firstBackImg {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .secondBackImg {
+        transform: translate(50%, 50%) rotate(45deg);
+    }
+    .registerForm {
+        width: 600px;
+    }
+    .registerForm div label {
+        margin-top: 30px;
+    }
+</style>
