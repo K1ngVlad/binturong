@@ -1,98 +1,59 @@
 <script setup lang="ts">
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+    import { useForm, Link } from '@inertiajs/vue3';
+    import BaseLayout from '@/Layouts/BaseLayout.vue';
+    import InputLabel from '@/Components/InputLabel.vue';
+    import Button from '@/Components/Button.vue';
+    import rectImgUrl from '../../../assets/svg/rect.svg';
 
-defineProps<{
-    canResetPassword?: boolean;
-    status?: string;
-}>();
+    const form = useForm({
+        email: null,
+        password: null,
+        remember: false,
+    })
 
-const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
-});
-
-const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => {
-            form.reset('password');
-        },
-    });
-};
+    const onSubmit = () => {
+        form.post('/login');
+        form.reset();
+    } 
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
-
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
+    <BaseLayout not-width-limit>
+        <div class="relative h-full flex items-center justify-center">
+            <img class="size-96 absolute top-0 left-0 firstBackImg" :src="rectImgUrl"/>
+            <img class="size-96 absolute bottom-0 right-0 secondBackImg" :src="rectImgUrl"/>
+            <form @submit.prevent="onSubmit" class="p-10 loginForm bg-white shadow-md rounded-xl flex flex-col">
+                <h2 class="self-center text-orange-400 text-3xl font-medium">Вход</h2>
+                <div class="flex flex-col">
+                    <InputLabel :error="form.errors.email" title="Email">
+                        <input type="email" name="email" v-model="form.email" required/>
+                    </InputLabel>
+                    <InputLabel :error="form.errors.password" title="Пароль">
+                        <input type="password" name="password" v-model="form.password" required/>
+                    </InputLabel>
+                </div>
+                <div class="mt-10">
+                    <Button>Вход</Button>
+                </div>
+                <div>
+                    <Link :href="route('register')">Зарегестироваться</Link>
+                </div>
+            </form>
         </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
-                </label>
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+    </BaseLayout>
 </template>
+
+<style lang="css">
+    .firstBackImg {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .secondBackImg {
+        transform: translate(50%, 50%) rotate(45deg);
+    }
+    .loginForm {
+        width: 600px;
+    }
+    .loginForm div label {
+        margin-top: 30px;
+    }
+</style>
