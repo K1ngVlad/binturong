@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { useForm } from '@inertiajs/vue3';
+    import { useForm, Link } from '@inertiajs/vue3';
     import BaseLayout from '@/Layouts/BaseLayout.vue';
     import InputLabel from '@/Components/InputLabel.vue';
     import Button from '@/Components/Button.vue';
@@ -34,6 +34,9 @@
                 </div>
                 <div class="mt-10">
                     <Button>Вход</Button>
+                </div>
+                <div>
+                    <Link :href="route('register')">Зарегестироваться</Link>
                 </div>
             </form>
         </div>

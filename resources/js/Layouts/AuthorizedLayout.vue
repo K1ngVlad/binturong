@@ -1,26 +1,12 @@
 <script setup lang="ts">
-    import { Link } from '@inertiajs/vue3';
+    import Hero from '@/Components/Hero.vue';
+    import Nav from '@/Components/Nav.vue';
 </script>
 
 <template>
     <div>
-        <div>ЛОГО</div>
-        <nav>
-            <li class="flex">
-                <ul>
-                    <Link :href="route('main')">Главная</Link>
-                </ul>
-                <ul>
-                    <Link :href="route('projects')">Реестр проектов</Link>
-                </ul>
-                <ul>
-                    <Link :href="route('libary')">Библиотека</Link>
-                </ul>
-                <ul>
-                    <Link :href="route('admin')">Управление проектами</Link>
-                </ul>
-            </li>
-        </nav>
+        <Hero/>
+        <Nav/>
         <slot></slot>
     </div>
 </template>
