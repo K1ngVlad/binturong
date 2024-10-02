@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin', [PageController::class, 'admin'])->name('admin');
     Route::get('/admin/import', [PageController::class, 'import'])->name('import');
     Route::post('/import', [ProjectController::class, 'import']);
+    Route::post('/projects', [ProjectController::class, 'filter']);
 });
 
 require __DIR__ . '/auth.php';

@@ -21,4 +21,9 @@ class ProjectController extends Controller
 
         return redirect('/')->with('success', 'All good!');
     }
+
+    public function filter(Request $request)
+    {
+        dd($request);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,13 @@ class PageController extends Controller
 
     public function projects(): Response
     {
-        return Inertia::render('Projects');
+
+        $projects = Project::all();
+
+        return Inertia::render('Projects', [
+            'projects'  => $projects,
+            'type' => 'base'
+        ]);
     }
 
     public function libary(): Response
