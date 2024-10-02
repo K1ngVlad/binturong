@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('project_id');
             $table->string('sign')->nullable();
             $table->string('status')->nullable();
-            $table->timestamp('year_of_completion')->nullable();
+            $table->string('year_of_completion')->nullable();
             $table->string('product')->nullable();
             $table->string('product_manager')->nullable();
             $table->string('product_characteristics')->nullable();

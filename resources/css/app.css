@@ -18,3 +18,16 @@ html, body {
     height: 100%;
     position: relative;
 }
+
+.filter {
+    background-color: #475569;
+    padding-left: 12px;
+    padding-right: 12px;
+    min-width: 100px;
+    color: white;
+    height: 32px;
+}
+
+.filter + .filter {
+    margin-left: 12px;
+}

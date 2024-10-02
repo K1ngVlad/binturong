@@ -4,9 +4,9 @@
 </script>
 
 <template>
-    <div>
-        <Hero/>
-        <Nav/>
+    <Hero/>
+    <Nav/>
+    <section class="flex flex-grow flex-col">
         <slot></slot>
-    </div>
+     </section>
 </template>

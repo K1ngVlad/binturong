@@ -43,4 +43,9 @@ class PageController extends Controller
     {
         return Inertia::render('Admin/Main');
     }
+
+    public function import(): Response
+    {
+        return Inertia::render('Admin/Import');
+    }
 }

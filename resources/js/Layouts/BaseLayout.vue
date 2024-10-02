@@ -11,7 +11,7 @@
     <div class="flex relative flex-col h-full">
         <Header/>
         <main class="bg-slate-100 grow flex justify-center">
-            <div :class="notWidthLimit ? 'no-w-limit' : ''" id="container">
+            <div :class="'flex flex-col' + (notWidthLimit ? ' no-w-limit' : '')" id="container">
                 <slot></slot>
             </div>
         </main>

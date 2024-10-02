@@ -8,7 +8,7 @@
 </script>
 
 <template>
-    <header class="bg-white w-full h-20 flex items-center justify-between px-12 z-10">
+    <header class="bg-white w-full h-16 flex items-center justify-between px-12 z-10">
         <Link class="h-full" :href="route('home')">
             <img class="h-full" alt="logo" :src="imgUrl"/>
         </Link>

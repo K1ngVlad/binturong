@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import BaseLayout from '@/Layouts/BaseLayout.vue';
-    import { Link } from '@inertiajs/vue3';
     import Button from '@/Components/Button.vue';
     import folderImgUrl from '../../assets/svg/folder.svg';
     import protfolioImgUrl from '../../assets/svg/portfolio.svg';

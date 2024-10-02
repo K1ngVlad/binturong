@@ -1,5 +1,5 @@
 <template>
-    <footer class="bg-slate-200 h-14 flex items-center px-20 justify-end z-10">
+    <footer class="bg-white h-12 flex items-center px-20 justify-end z-10">
         <address>
             <li class="flex">
                 <ul>

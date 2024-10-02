@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('project_states', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id');
-            $table->integer('sales_percentages')->default(0);
+            $table->string('sales_percentages')->default('0')->nullable();
             $table->string('general_status')->nullable();
             $table->string('business_goals')->nullable();
             $table->string('terms')->nullable();
