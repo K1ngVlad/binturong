@@ -33,7 +33,9 @@ class PageController extends Controller
     public function projects(): Response
     {
 
-        $projects = Project::all();
+        $projects = Project::with('projectCost', 'projectDocument', 'projectGoal', 'projectMonitoring', 'projectOrganizationalStructure', 'projectState', 'projectState', 'projectTerm')->get();
+
+        // $terms = $projects->projectTerm();
 
         return Inertia::render('Projects', [
             'projects'  => $projects,
