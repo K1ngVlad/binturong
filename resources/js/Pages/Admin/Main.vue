@@ -7,7 +7,12 @@
 <template>
     <BaseLayout>
         <AuthorizedLayout> 
-            <Link :href="route('import')">Импортировать</Link>
+            <!-- <Link class="filter w-36 ml-10" :href="route('import')">Импортировать</Link> -->
+             <div class="mt-10">
+                <Link class="filter w-36 p-2" :href="route('import')">Импортировать</Link>
+                <Link class="filter w-36 p-2" :href="route('main')">Права доступа</Link>
+                <Link class="filter w-36 p-2" :href="route('main')">Экспортировать логи</Link>
+             </div> 
         </AuthorizedLayout>
     </BaseLayout>
 </template>

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProjectsExport;
 use App\Http\Controllers\Controller;
 use App\Imports\ProjectImport;
 use App\Models\Project;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -22,6 +24,24 @@ class ProjectController extends Controller
         }
 
         return redirect('/')->with('success', 'All good!');
+    }
+
+    public function download()
+    {
+        // dd(storage_path('app\private\projects.xlsx'));
+        // $path = Storage::disk('private')->path('projects.xlsx');
+        $path = storage_path('app\private\projects.xlsx');
+
+        return response()->download($path);
+    }
+
+    public function export()
+    {
+        Excel::store(new ProjectsExport, 'projects.xlsx');
+
+        return Inertia::render('Export', [
+            'link' => storage_path('projects.xlsx')
+        ]);
     }
 
     public function filter(Request $request)

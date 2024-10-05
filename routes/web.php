@@ -30,14 +30,17 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 
 // Route::get('/import', [ProjectController::class, 'import'])->name('import');
 
+Route::get('/export', [ProjectController::class, 'export'])->name('export');
+Route::post('/projects', [ProjectController::class, 'filter']);
+Route::get('/download', [ProjectController::class, 'download'])->name('download');
+Route::get('/projects', [PageController::class, 'projects'])->name('projects');
+Route::get('/libary', [PageController::class, 'libary'])->name('libary');
+Route::get('/main', [PageController::class, 'main'])->name('main');
+
 Route::middleware('auth')->group(function () {
-    Route::get('/main', [PageController::class, 'main'])->name('main');
-    Route::get('/projects', [PageController::class, 'projects'])->name('projects');
-    Route::get('/libary', [PageController::class, 'libary'])->name('libary');
     Route::get('/admin', [PageController::class, 'admin'])->name('admin');
     Route::get('/admin/import', [PageController::class, 'import'])->name('import');
     Route::post('/import', [ProjectController::class, 'import']);
-    Route::post('/projects', [ProjectController::class, 'filter']);
 });
 
 require __DIR__ . '/auth.php';

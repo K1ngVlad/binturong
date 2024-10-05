@@ -35,7 +35,7 @@
                 <div class="mt-10">
                     <Button>Вход</Button>
                 </div>
-                <div>
+                <div class="mt-4">
                     <Link :href="route('register')">Зарегестироваться</Link>
                 </div>
             </form>

@@ -1,23 +1,66 @@
 <script setup lang="ts">
-    import { useForm } from '@inertiajs/vue3';
+    import { useForm} from '@inertiajs/vue3';
     import BaseLayout from '@/Layouts/BaseLayout.vue';
     import AuthorizedLayout from '@/Layouts/AuthorizedLayout.vue';
     import { computed, onMounted, ref, VNodeRef } from 'vue';
+    import arrowImgUrl from '../../assets/svg/arrow.svg';
+    import houseImgUrl from '../../assets/svg/house.svg';
 
     const props = defineProps<{
         projects: Array<any>,
-        type: string
+        type?: string,
+        link?: string
     }>();
 
     console.log(props);
 
     const form = useForm({
         category: 0,
-        portfolio_year: false,
-        archive: false,
-        project_year: false,
+        portfolio_year: true,
+        archive: true,
+        project_year: true,
         search: ''
     });
+
+    const sortCol = ref(0);
+    const subSortCol = ref(0);
+    const sortType = ref(0);
+
+    const reset = () => {
+        form.reset();
+        form.portfolio_year = true;
+        form.archive = true;
+        form.project_year = true;
+        form.search = '';
+        sortCol.value = 0;
+        subSortCol.value = 0;
+        sortType.value = 0;
+        category.value = 0;
+        submit();
+    };
+
+    const changeFilter = (index: number, subIndex: number = 0) => {
+        if(index !== sortCol.value || subIndex !== subSortCol.value){
+            sortType.value = 1;
+        }else {
+            switch (sortType.value) {
+                case 0:
+                    sortType.value = 1;
+                    break;
+                case 1:
+                    sortType.value = 2;
+                    break;
+                case 2:
+                    sortType.value = 0;
+                    break;
+                default:
+                    sortType.value = 0;
+                    break;
+            }
+        }
+        sortCol.value = index;
+        subSortCol.value = subIndex;
+    }
 
     const tableBody = ref<VNodeRef | null>(null);
 
@@ -76,7 +119,9 @@
         [4, 5, 6, 7, 8],
         [9, 10, 11, 12, 13, 14],
         [15, 16, 17, 18, 19],
-        [20, 21, 22, 23]
+        [20, 21, 22, 23],
+        [4, 5, 6, 7, 8],
+        [9, 10, 11, 12, 13, 14],
     ];
 
     const currentTitles = computed(() => {
@@ -137,9 +182,29 @@
             }
             return '';
         }))}));
+        if(sortType.value && sortCol.value !== 0) {
+            fullFields.sort((prevFields, nextFields) => {
+                console.log(sortCol.value);
+                console.log(prevFields.values);
+                console.log(prevFields.values[sortCol.value - 1]);
+                let prevValue = subSortCol.value ? prevFields.values[sortCol.value - 1][subSortCol.value - 1] : prevFields.values[sortCol.value - 1];
+                let nextValue = subSortCol.value ? nextFields.values[sortCol.value - 1][subSortCol.value - 1] : nextFields.values[sortCol.value - 1];
+
+                prevValue = prevValue ? prevValue : '';
+                nextValue = nextValue ? nextValue : '';
+
+                if(prevValue > nextValue) {
+                    return sortType.value === 1 ? 1 : -1;
+                }
+                else if (prevValue < nextValue) {
+                    return sortType.value === 1 ? -1 : 1;
+                }
+
+                return 0;
+            });
+        }
         return fullFields;
     });
-    
 </script>
 
 <template>
@@ -149,21 +214,23 @@
                 <div class="h-full flex flex-col justify-between">
                     <div>
                         <label>
-                            <input v-model="form.portfolio_year" type="checkbox"/>
+                            <input v-model="form.portfolio_year" type="checkbox" @change="submit"/>
                             <span>Портфель проектов текущего года</span>
                         </label>
                         <label>
-                            <input v-model="form.archive" type="checkbox"/>
+                            <input v-model="form.archive" type="checkbox" @change="submit"/>
                             <span>Архивные проекты</span>
                         </label>
                         <label>
-                            <input v-model="form.project_year" type="checkbox"/>
+                            <input v-model="form.project_year" type="checkbox" @change="submit"/>
                             <span>Проект портфеля текущего года</span>
                         </label>
                     </div>
                     <div class="flex items-end">
-                        <button class="filter">Экспорт</button>
-                        <div class="filter relative w-36">
+                        <a target="_blank" :href="route('export')">
+                            <button type="button" class="filter">Экспорт</button>
+                        </a>
+                        <!-- <div class="filter relative w-36">
                             Группировать
                             <div class="absolute top-0 left-0 w-full h-full z-10 pointer-events-none bg-slate-600 flex justify-center items-center">Группировать</div>
                             <select v-model="form.category" class="text-black absolute top-0 left-0 w-full h-full">
@@ -171,7 +238,7 @@
                                 <option value="1">Категория</option>
                                 <option value="3">Заказчик</option>
                             </select>
-                        </div>
+                        </div> -->
                         <label>
                             <span>Поиск: </span>
                             <input v-model="form.search"/>
@@ -179,6 +246,9 @@
                     </div>
                 </div>
                 <div class="flex h-full items-end">
+                    <button type="button" @click="reset" style="background-color: tomato; margin-right: 10px;">
+                        <img class="h-8" alt="reset" :src="houseImgUrl"/>
+                    </button>
                     <button @click.left="category = 0" type="button" class="filter" :style="category === 0 ? 'background-color: tomato' : ''">Общая информация</button>
                     <button @click.left="category = 1" type="button" class="filter" :style="category === 1 ? 'background-color: tomato' : ''">Состояние</button>
                     <button @click.left="category = 2" type="button" class="filter" :style="category === 2 ? 'background-color: tomato' : ''">Команда проекта</button>
@@ -197,9 +267,33 @@
                     </template>
 			    </tr>
                 <tr>
-                    <template  v-for="(title, i) in currentTitles" :key="i">
+                    <template v-for="(title, i) in currentTitles" :key="i">
                         <th v-for="(subTitle, i) in title[1]" :key="i" :title="subTitle">{{ subTitle }}</th>
                     </template>   
+                </tr>
+                <tr>
+                    <td></td>
+                    <template  v-for="(title, i) in currentTitles" :key="i">
+                        <!-- <td @click="changeFilter(i + 2)">Фильтр</td> -->
+                        <td v-if="!title[1].length" @click="changeFilter(i + 1)">
+                            <div class="flex items-center select-none cursor-pointer">
+                                <span class="ml-4 text-gray-500">Фильтр</span>
+                                <div class="flex flex-col ml-4">
+                                    <img :class="'h-4' + ((sortCol === (i + 1) && sortType === 2) ? ' hidden' : '')" alt="sort" :src="arrowImgUrl"/>
+                                    <img :class="'h-4 rotate-180' + ((sortCol === (i + 1) && sortType === 1) ? ' hidden' : '')" alt="sort" :src="arrowImgUrl"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td v-for="(_, j) in title[1]" :key="j" @click="changeFilter(i + 1, j + 1)">
+                            <div class="flex items-center select-none cursor-pointer">
+                                <span class="ml-4 text-gray-500">Фильтр</span>
+                                <div class="flex flex-col ml-4">
+                                    <img :class="'h-4' + ((sortCol === (i + 1) && sortType === 2 && subSortCol === (j + 1)) ? ' hidden' : '')" alt="sort" :src="arrowImgUrl"/>
+                                    <img :class="'h-4 rotate-180' + ((sortCol === (i + 1) && sortType === 1 && subSortCol === (j + 1)) ? ' hidden' : '')" alt="sort" :src="arrowImgUrl"/>
+                                </div>
+                            </div>
+                        </td>
+                    </template>
                 </tr>
 		    </thead>
 	    </table>	

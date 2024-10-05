@@ -15,14 +15,14 @@ class PageController extends Controller
 {
     public function home(): Response | RedirectResponse
     {
-        if (Auth::check()) {
-            return redirect('/main');
-        }
-
-        return Inertia::render('Home', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-        ]);
+        // if (Auth::check()) {
+        //     return redirect('/main');
+        // }
+        return redirect('/main');
+        // return Inertia::render('Home', [
+        //     'canLogin' => Route::has('login'),
+        //     'canRegister' => Route::has('register'),
+        // ]);
     }
 
     public function main(): Response
@@ -56,5 +56,12 @@ class PageController extends Controller
     public function import(): Response
     {
         return Inertia::render('Admin/Import');
+    }
+
+    public function export()
+    {
+        return Inertia::render('Export', [
+            'link' => storage_path('projects.xlsx')
+        ]);
     }
 }

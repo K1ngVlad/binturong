@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import logoImgurl from '../../assets/logo-long.png';
     import backgroundUrl from '../../assets/background.jpg';
+    import { usePage } from '@inertiajs/vue3';
+    import { computed } from 'vue';
 
     const months = ["января", "февраля", "марта", "апреля", "майя", "июня", "июля", "августа", "сентября", "октября", "ноября", "декобря"];
 
@@ -15,6 +17,8 @@
 
         return `${day} ${months[month]} ${year} г. ${weekDays[weekDay]}`;
     }
+
+    const user = computed(() => usePage().props?.auth?.user);
 </script>
 
 <template>
@@ -24,7 +28,7 @@
         </div>
         <div class="flex grow flex-col h-full justify-between px-10 pt-2">
             <div class="flex w-full justify-between text-xl font-medium">
-                <span>Хитрунов Владислав (Мафиозник)</span>
+                <span>{{ user?.name ? user.name : 'Не авторизован' }}</span>
                 <time>{{ getDate() }}</time>
             </div>
             <div class="text-center text-4xl font-bold"><h2>Портал проектного управления</h2></div>
